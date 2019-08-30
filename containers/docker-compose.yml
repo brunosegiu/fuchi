@@ -1,0 +1,28 @@
+version: '3'
+services:
+  database:
+    image: "postgres:latest"
+    container_name: "postgres-fuchi"
+    restart: "no"
+    tty: true
+    env_file: 
+      - config/database.env
+    volumes: 
+      - ./database:/var/lib/postgresql/data/pgdata
+    ports: 
+      - "5432:5432"
+  api:
+    image: "golang:latest"
+    container_name: "webserver-fuchi"
+    restart: "no"
+    command: "/bin/bash"
+    tty: true
+    env_file: 
+      - config/database.env
+      - config/api.env
+    volumes:
+      - ../backend/api:/usr/src/
+    ports:
+      - "8000:8000"
+    links:
+      - database
