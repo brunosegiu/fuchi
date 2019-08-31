@@ -1,0 +1,16 @@
+type Team {
+  players: [User!]!
+}
+
+type MatchResult {
+  score: Int!
+  team: Team!
+}
+
+type Match {
+  id: ID!
+  sport: Sport!
+  timestamp: Int!
+  teams: [Team!]!
+  results: [MatchResult!]
+}
