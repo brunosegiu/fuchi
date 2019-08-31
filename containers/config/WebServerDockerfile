@@ -1,0 +1,12 @@
+FROM golang:latest
+
+RUN mkdir /app
+COPY ./backend /usr/src/fuchi_backend
+WORKDIR /usr/src/fuchi_backend/api
+RUN go mod download
+RUN go build -o server.exe server/server.go
+RUN cp server.exe /app
+
+WORKDIR /app
+
+CMD ["./server.exe"]

@@ -20,7 +20,7 @@ func main() {
 	// Main Endpoint
 	http.Handle("/query", handler.GraphQL(api.NewExecutableSchema(api.Config{Resolvers: &api.Resolver{}})))
 	// Static content Handler
-	http.Handle("/", http.FileServer(http.Dir("./static")))
+	http.Handle("/", http.FileServer(http.Dir("./")))
 	// Playground
 	http.Handle("/graphql-explorer", handler.Playground("GraphQL", "/query"))
 
