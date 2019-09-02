@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 import Container from '@material-ui/core/Container'
 
@@ -8,10 +8,12 @@ import SpeedDial from './components/SpeedDial'
 
 export default () => {
   return (
-    <Container>
-    <Toolbar/>
-    <SpeedDial></SpeedDial>
-    <SignIn></SignIn>
-    </Container>
-  );
+    <div style={{ width: '100vh', height: '100vh', overflow: 'hidden' }}>
+      <Container>
+        <Toolbar />
+        <SpeedDial></SpeedDial>
+        <SignIn></SignIn>
+      </Container>
+    </div>
+  )
 }
