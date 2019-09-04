@@ -1,4 +1,0 @@
-type Sport {
-  id: ID!
-  name: String!
-}

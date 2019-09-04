@@ -2,27 +2,30 @@ package main
 
 import (
 	"api"
+	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 
-	"github.com/99designs/gqlgen/handler"
+	"github.com/graph-gophers/graphql-go"
+	"github.com/graph-gophers/graphql-go/relay"
 )
 
-const defaultPort = "8080"
+func loadFile(path string) []byte {
+	content, _ := ioutil.ReadFile(path)
+	return content
+}
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
-	}
+	rawSchema := string(loadFile("schema.graphql"))
 
-	// Main Endpoint
-	http.Handle("/query", handler.GraphQL(api.NewExecutableSchema(api.Config{Resolvers: &api.Resolver{}})))
-	// Static content Handler
-	http.Handle("/", http.FileServer(http.Dir("./")))
-	// Playground
-	http.Handle("/graphql-explorer", handler.Playground("GraphQL", "/query"))
+	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers(), graphql.MaxParallelism(20)}
+	schema := graphql.MustParseSchema(rawSchema, &api.Resolver{}, opts...)
 
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	webpage := loadFile("explorer.html")
+	http.Handle("/explorer", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write(webpage)
+	}))
+	http.Handle("/query", &relay.Handler{Schema: schema})
+
+	log.Fatal(http.ListenAndServe(":1313", nil))
 }

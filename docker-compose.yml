@@ -3,9 +3,9 @@ services:
   database:
     image: 'postgres:latest'
     env_file:
-      - ./containers/config/database.env
+      - containers/config/database.env
     volumes:
-      - ./containers/database:/var/lib/postgresql/data/pgdata
+      - ./containers/database:/var/lib/postgresql/data
     ports:
       - '5432:5432'
   webserver:
@@ -13,8 +13,8 @@ services:
       context: ./
       dockerfile: ./containers/config/WebServerDockerfile
     env_file:
-      - ./containers/config/database.env
-      - ./containers/config/api.env
+      - containers/config/database.env
+      - containers/config/api.env
     volumes:
       - ./containers/static:/app
     ports:
