@@ -10,3 +10,8 @@ build_backend:
 
 up:
 	docker-compose up
+
+exports:
+	set -o allexport
+	source ./containers/config/database.env
+	set +o allexport

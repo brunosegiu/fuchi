@@ -1,11 +1,10 @@
-package api
+package resolvers
 
 import (
+	database "api/database"
+	models "api/models"
 	"context"
 	"fmt"
-	"log"
-
-	"api/models"
 )
 
 var users = []*models.User{
@@ -25,19 +24,14 @@ var users = []*models.User{
 
 var usersMap = make(map[string]*models.User)
 
-type Resolver struct{}
-
 func (r *Resolver) User(ctx context.Context, args struct{ Id string }) (models.User, error) {
-	for _, _usr := range users {
-		usersMap[_usr.IDField] = _usr
+	db := database.Connect()
+	user, err := db.LoadUser(args.Id)
+	if err != nil {
+		err := fmt.Errorf("user with id=%s does not exist", args.Id)
+		return models.User{}, err
+	} else {
+		return *user, nil
 	}
-	if usr, ok := usersMap[args.Id]; ok {
-		return *usr, nil
-	}
-	log.Printf("Getting user %s", args.Id)
-	for _, _usr := range users {
-		log.Printf("Available id user %s", _usr.IDField)
-	}
-	err := fmt.Errorf("user with id=%s does not exist", args.Id)
-	return models.User{}, err
+
 }

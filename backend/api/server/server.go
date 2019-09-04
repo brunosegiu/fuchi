@@ -1,11 +1,13 @@
 package main
 
 import (
-	"api"
+	resolvers "api/resolvers"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
+	"github.com/go-http-utils/logger"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 )
@@ -16,16 +18,19 @@ func loadFile(path string) []byte {
 }
 
 func main() {
-	rawSchema := string(loadFile("schema.graphql"))
+	rawSchema := string(loadFile("schema/schema.graphql"))
 
 	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers(), graphql.MaxParallelism(20)}
-	schema := graphql.MustParseSchema(rawSchema, &api.Resolver{}, opts...)
+	schema := graphql.MustParseSchema(rawSchema, &resolvers.Resolver{}, opts...)
 
-	webpage := loadFile("explorer.html")
-	http.Handle("/explorer", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	webpage := loadFile("assets/explorer.html")
+
+	mux := http.NewServeMux()
+
+	mux.Handle("/explorer", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(webpage)
 	}))
-	http.Handle("/query", &relay.Handler{Schema: schema})
+	mux.Handle("/query", &relay.Handler{Schema: schema})
 
-	log.Fatal(http.ListenAndServe(":1313", nil))
+	log.Fatal(http.ListenAndServe(":1313", logger.Handler(mux, os.Stdout, logger.DevLoggerType)))
 }
