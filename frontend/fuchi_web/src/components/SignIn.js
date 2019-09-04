@@ -12,7 +12,7 @@ export default () => {
   return (
     <GoogleLogin
       clientId={GOOGLE_CLIENT_ID}
-      buttonText="Login"
+      buttonText="Sign in with Google"
       onSuccess={onResponse}
       onFailure={onResponse}
       cookiePolicy={'single_host_origin'}
