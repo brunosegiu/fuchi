@@ -1,37 +1,28 @@
 package resolvers
 
 import (
-	database "api/database"
 	models "api/models"
 	"context"
 	"fmt"
 )
 
-var users = []*models.User{
-	{
-		IDField:       "0x01",
-		NicknameField: "Albus Dumbledore",
-	},
-	{
-		IDField:       "0x02",
-		NicknameField: "Harry Potter",
-	},
-	{
-		IDField:       "0x03",
-		NicknameField: "Hermione Granger",
-	},
-}
-
-var usersMap = make(map[string]*models.User)
-
-func (r *Resolver) User(ctx context.Context, args struct{ Id string }) (models.User, error) {
-	db := database.Connect()
-	user, err := db.LoadUser(args.Id)
+func (r *Resolver) User(ctx context.Context, args struct{ id string }) (models.User, error) {
+	user, err := r.DB.LoadUser(args.id)
 	if err != nil {
-		err := fmt.Errorf("user with id=%s does not exist", args.Id)
+		err := fmt.Errorf("user with id=%s does not exist", args.id)
 		return models.User{}, err
 	} else {
 		return *user, nil
 	}
+}
 
+func (r *Resolver) CreateUser(ctx context.Context, args struct {
+	id       string
+	nickname string
+}) (models.User, error) {
+	user, err := r.DB.CreateUser(args.id, args.nickname)
+	if err != nil {
+		panic(err)
+	}
+	return *user, nil
 }

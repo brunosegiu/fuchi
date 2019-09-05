@@ -3,14 +3,14 @@ package models
 import "github.com/graph-gophers/graphql-go"
 
 type User struct {
-	IDField       string
-	NicknameField string
+	ID_       string
+	Nickname_ string
 }
 
 func (u User) ID() graphql.ID {
-	return graphql.ID(u.IDField)
+	return graphql.ID(u.ID_)
 }
 
 func (u User) Nickname() string {
-	return u.NicknameField
+	return u.Nickname_
 }

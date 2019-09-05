@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"os"
 
+	sq "github.com/Masterminds/squirrel"
+
 	_ "github.com/lib/pq"
 )
 
 type DBConnection struct {
-	DB *sql.DB
+	DB      *sql.DB
+	Builder sq.StatementBuilderType
 }
 
 func Connect() *DBConnection {
@@ -29,5 +32,6 @@ func Connect() *DBConnection {
 	if err != nil {
 		panic(err)
 	}
-	return &DBConnection{DB: db}
+	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
+	return &DBConnection{DB: db, Builder: psql}
 }

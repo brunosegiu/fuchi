@@ -2,6 +2,7 @@ package main
 
 import (
 	resolvers "api/resolvers"
+	database "api/database"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -20,8 +21,10 @@ func loadFile(path string) []byte {
 func main() {
 	rawSchema := string(loadFile("schema/schema.graphql"))
 
+	conn := database.Connect()
+
 	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers(), graphql.MaxParallelism(20)}
-	schema := graphql.MustParseSchema(rawSchema, &resolvers.Resolver{}, opts...)
+	schema := graphql.MustParseSchema(rawSchema, &resolvers.Resolver{DB: conn}, opts...)
 
 	webpage := loadFile("assets/explorer.html")
 
