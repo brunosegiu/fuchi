@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { styled } from '@material-ui/styles';
-
+import { styled } from '@material-ui/styles'
 
 import Toolbar from '@material-ui/core/Toolbar'
 import AppBar from '@material-ui/core/AppBar'
@@ -15,47 +14,60 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import MailIcon from '@material-ui/icons/Mail'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import MoreIcon from '@material-ui/icons/MoreVert'
-import  Container  from '@material-ui/core/Container';
+import Container from '@material-ui/core/Container'
+
+const CustomAppBar = styled(AppBar)({
+  zIndex: 999999,
+})
 
 const CustomToolbar = styled(Toolbar)({
   display: 'flex',
-  justifyContent: "space-between"
+  justifyContent: 'space-between',
 })
 
 const SectionContainer = styled(Container)({
-  display: "flex",
-  alignItems: "center",
-  width: "fit-content",
+  display: 'flex',
+  alignItems: 'center',
+  width: 'fit-content',
   padding: 0,
-  margin: "0 1vw"
+  margin: '0 1vw',
 })
 
-export default () => {
+export default ({ open, setOpen }) => {
   return (
-    <AppBar position="static">
+    <CustomAppBar position="fixed">
       <CustomToolbar disableGutters>
         <SectionContainer>
-        <IconButton edge="start" color="inherit" aria-label="open drawer">
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" noWrap>
-          Fuchi
-        </Typography>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="open drawer"
+            onClick={() => setOpen(!open)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Fuchi
+          </Typography>
         </SectionContainer>
         <SectionContainer>
-        <IconButton
-          edge="end"
-          aria-label="account of current user"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <IconButton aria-label="show more" aria-haspopup="true" color="inherit">
-          <MoreIcon />
-        </IconButton>
+          <IconButton
+            edge="end"
+            aria-label="account of current user"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
+          <IconButton
+            aria-label="show more"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <MoreIcon />
+          </IconButton>
         </SectionContainer>
       </CustomToolbar>
-    </AppBar>
+    </CustomAppBar>
   )
 }

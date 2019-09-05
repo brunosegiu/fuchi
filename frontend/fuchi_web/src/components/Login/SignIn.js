@@ -2,7 +2,7 @@ import React from 'react'
 
 import { GoogleLogin } from 'react-google-login'
 
-import { GOOGLE_CLIENT_ID } from '../utils/constants'
+import { GOOGLE_CLIENT_ID } from '../../utils/constants'
 
 const onResponse = response => {
   console.log(response)
