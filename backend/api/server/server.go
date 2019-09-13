@@ -1,15 +1,15 @@
 package main
 
 import (
-	resolvers "api/resolvers"
 	database "api/database"
+	resolvers "api/resolvers"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/go-http-utils/logger"
-	"github.com/graph-gophers/graphql-go"
+	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 )
 
@@ -24,7 +24,7 @@ func main() {
 	conn := database.Connect()
 
 	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers(), graphql.MaxParallelism(20)}
-	schema := graphql.MustParseSchema(rawSchema, &resolvers.Resolver{DB: conn}, opts...)
+	schema := graphql.MustParseSchema(rawSchema, &resolvers.Resolver{DB: *conn}, opts...)
 
 	webpage := loadFile("assets/explorer.html")
 

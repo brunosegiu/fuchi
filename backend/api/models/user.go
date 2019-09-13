@@ -1,6 +1,6 @@
 package models
 
-import "github.com/graph-gophers/graphql-go"
+import graphql "github.com/graph-gophers/graphql-go"
 
 type User struct {
 	ID_       string

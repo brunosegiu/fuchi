@@ -2,11 +2,11 @@ schema {
   query: Query
 }
 
-type Query {
-  user(id: String!): User!
-}
-
 type User {
   id: ID!
   nickname: String!
+}
+
+type Query {
+  getUser(id: String!): User
 }

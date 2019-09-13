@@ -1,13 +1,15 @@
-version: '3'
+version: "3.7"
 services:
   database:
-    image: 'postgres:latest'
+    image: "postgres:latest"
     env_file:
       - containers/config/database.env
     volumes:
-      - ./containers/database:/var/lib/postgresql/data
+      - type: volume
+        source: dbdata
+        target: /var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - "5432:5432"
   webserver:
     build:
       context: ./
@@ -18,8 +20,10 @@ services:
     volumes:
       - ./containers/static:/app
     ports:
-      - '8080:8080'
+      - "8080:8080"
     links:
       - database
     stdin_open: true
     tty: true
+volumes:
+  dbdata:
