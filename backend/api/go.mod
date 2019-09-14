@@ -9,6 +9,8 @@ require (
 	github.com/go-http-utils/logger v0.0.0-20161128092850-f3a42dcdeae6
 	github.com/google/uuid v1.1.1
 	github.com/graph-gophers/graphql-go v0.0.0-20190902214650-641ae197eec7
+	github.com/jinzhu/gorm v1.9.10
 	github.com/lib/pq v1.2.0
+	github.com/rs/cors v1.6.0
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45 // indirect
 )

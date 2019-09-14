@@ -1,21 +1,18 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 	"os"
 
-	sq "github.com/Masterminds/squirrel"
+	models "api/models"
 
-	_ "github.com/lib/pq"
+	gorm "github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type DBConnection struct {
-	DB      *sql.DB
-	Builder sq.StatementBuilderType
-}
+var DB *gorm.DB = connect()
 
-func Connect() *DBConnection {
+func connect() *gorm.DB {
 	user := os.Getenv("POSTGRES_USER")
 	password := os.Getenv("POSTGRES_PASSWORD")
 	dbName := os.Getenv("POSTGRES_DB")
@@ -24,14 +21,11 @@ func Connect() *DBConnection {
 	psqlInfo := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable",
 		dbHost, user, password, dbName)
 
-	db, err := sql.Open("postgres", psqlInfo)
+	db, err := gorm.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)
 	}
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-	psql := sq.StatementBuilder.PlaceholderFormat(sq.Dollar)
-	return &DBConnection{DB: db, Builder: psql}
+	db.AutoMigrate(&models.User{})
+
+	return db
 }

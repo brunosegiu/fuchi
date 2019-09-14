@@ -1,7 +1,7 @@
 package main
 
 import (
-	database "api/database"
+	commons "api/commons"
 	resolvers "api/resolvers"
 	"io/ioutil"
 	"log"
@@ -22,19 +22,16 @@ func loadFile(path string) []byte {
 func main() {
 	rawSchema := string(loadFile("schema/schema.graphql"))
 
-	conn := database.Connect()
-
-	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers(), graphql.MaxParallelism(20)}
-	schema := graphql.MustParseSchema(rawSchema, &resolvers.Resolver{DB: *conn}, opts...)
+	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers(), graphql.MaxParallelism(20), graphql.UseFieldResolvers()}
+	schema := graphql.MustParseSchema(rawSchema, &resolvers.Resolver{}, opts...)
 
 	webpage := loadFile("assets/explorer.html")
 
 	mux := http.NewServeMux()
-
 	mux.Handle("/explorer", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Write(webpage)
 	}))
-	mux.Handle("/query", &relay.Handler{Schema: schema})
+	mux.Handle("/query", commons.WithAuth(&relay.Handler{Schema: schema}))
 
 	handler := cors.Default().Handler(mux)
 	log.Fatal(http.ListenAndServe(":1313", logger.Handler(handler, os.Stdout, logger.DevLoggerType)))

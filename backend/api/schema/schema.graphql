@@ -12,15 +12,9 @@ type User {
 }
 
 type Query {
-  getUser(id: String!): User
+  me: User
 }
 
 type Mutation {
-  createUser(
-    nickname: String!
-    idToken: String
-    email: String
-    externalId: String
-    imageURL: String
-  ): User!
+  createUser(nickname: String!): User!
 }
