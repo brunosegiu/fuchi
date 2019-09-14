@@ -6,15 +6,11 @@ import Toolbar from '@material-ui/core/Toolbar'
 import AppBar from '@material-ui/core/AppBar'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
-import InputBase from '@material-ui/core/InputBase'
-import Badge from '@material-ui/core/Badge'
 import MenuIcon from '@material-ui/icons/Menu'
-import SearchIcon from '@material-ui/icons/Search'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import MailIcon from '@material-ui/icons/Mail'
-import NotificationsIcon from '@material-ui/icons/Notifications'
 import MoreIcon from '@material-ui/icons/MoreVert'
 import Container from '@material-ui/core/Container'
+import { Avatar } from '@material-ui/core'
+import { UserContext } from '../contexts'
 
 const CustomAppBar = styled(AppBar)({
   zIndex: 999999,
@@ -34,6 +30,7 @@ const SectionContainer = styled(Container)({
 })
 
 export default ({ open, setOpen }) => {
+  const user = React.useContext(UserContext)
   return (
     <CustomAppBar position="fixed">
       <CustomToolbar disableGutters>
@@ -57,7 +54,7 @@ export default ({ open, setOpen }) => {
             aria-haspopup="true"
             color="inherit"
           >
-            <AccountCircle />
+            <Avatar src={user && user.imageURL} />
           </IconButton>
           <IconButton
             aria-label="show more"

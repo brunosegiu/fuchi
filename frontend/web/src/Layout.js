@@ -9,8 +9,9 @@ import Toolbar from './components/Toolbar'
 import Content from './components/Content'
 import LoginModal from './components/Login/LoginModal'
 
-import { getToken } from './utils/signIn'
+import { getToken, getCurrentUser } from './utils/signIn'
 import { client } from './queries/client'
+import { UserContext } from './contexts'
 
 const ExpandedContainer = styled(Container)({
   maxWidth: '100vw',
@@ -28,11 +29,13 @@ export default () => {
   return (
     <BrowserRouter>
       <ApolloProvider client={client}>
-        <ExpandedContainer>
-          <Toolbar open={openDrawer} setOpen={setDrawerOpen} />
-          <Content open={openDrawer} setOpen={setDrawerOpen}></Content>
-          <LoginModal open={!getToken()}></LoginModal>
-        </ExpandedContainer>
+        <UserContext.Provider value={getCurrentUser()}>
+          <ExpandedContainer>
+            <Toolbar open={openDrawer} setOpen={setDrawerOpen} />
+            <Content open={openDrawer} setOpen={setDrawerOpen}></Content>
+            <LoginModal open={!getToken()}></LoginModal>
+          </ExpandedContainer>
+        </UserContext.Provider>
       </ApolloProvider>
     </BrowserRouter>
   )
