@@ -1,12 +1,26 @@
 schema {
   query: Query
+  mutation: Mutation
 }
 
 type User {
   id: ID!
   nickname: String!
+  email: String
+  externalId: String
+  imageURL: String
 }
 
 type Query {
   getUser(id: String!): User
+}
+
+type Mutation {
+  createUser(
+    nickname: String!
+    idToken: String
+    email: String
+    externalId: String
+    imageURL: String
+  ): User!
 }

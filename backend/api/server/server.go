@@ -11,6 +11,7 @@ import (
 	"github.com/go-http-utils/logger"
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
+	"github.com/rs/cors"
 )
 
 func loadFile(path string) []byte {
@@ -35,5 +36,6 @@ func main() {
 	}))
 	mux.Handle("/query", &relay.Handler{Schema: schema})
 
-	log.Fatal(http.ListenAndServe(":1313", logger.Handler(mux, os.Stdout, logger.DevLoggerType)))
+	handler := cors.Default().Handler(mux)
+	log.Fatal(http.ListenAndServe(":1313", logger.Handler(handler, os.Stdout, logger.DevLoggerType)))
 }
