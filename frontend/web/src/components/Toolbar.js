@@ -10,6 +10,8 @@ import MenuIcon from '@material-ui/icons/Menu'
 import MoreIcon from '@material-ui/icons/MoreVert'
 import Container from '@material-ui/core/Container'
 import { Avatar } from '@material-ui/core'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+
 import { UserContext } from '../contexts'
 
 const CustomAppBar = styled(AppBar)({
@@ -31,6 +33,7 @@ const SectionContainer = styled(Container)({
 
 export default ({ open, setOpen }) => {
   const user = React.useContext(UserContext)
+  console.log(user)
   return (
     <CustomAppBar position="fixed">
       <CustomToolbar disableGutters>
@@ -54,7 +57,13 @@ export default ({ open, setOpen }) => {
             aria-haspopup="true"
             color="inherit"
           >
-            <Avatar src={user && user.imageURL} />
+            {user ? (
+              <Avatar src={user.imageURL} color="primary">
+                {user.nickname ? user.nickname[0] : 'F'}
+              </Avatar>
+            ) : (
+              <AccountCircle></AccountCircle>
+            )}
           </IconButton>
           <IconButton
             aria-label="show more"

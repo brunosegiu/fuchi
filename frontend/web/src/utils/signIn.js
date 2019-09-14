@@ -12,10 +12,13 @@ export const handleSignOut = () => {
   localStorage.clear()
 }
 
-export const getCurrentUser = () => ({
-  email: localStorage.getItem('email'),
-  nickname: localStorage.getItem('nickname'),
-  imageURL: localStorage.getItem('imageURL'),
-  externalId: localStorage.getItem('externalId'),
-  idToken: localStorage.getItem('idToken'),
-})
+export const getCurrentUser = () => {
+  const user = {
+    email: localStorage.getItem('email'),
+    nickname: localStorage.getItem('nickname'),
+    imageURL: localStorage.getItem('imageURL'),
+    externalId: localStorage.getItem('externalId'),
+    idToken: localStorage.getItem('idToken'),
+  }
+  return Object.values(user).some(p => !p) ? null : user
+}
