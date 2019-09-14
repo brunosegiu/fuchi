@@ -55,6 +55,6 @@ func (conn *DBConnection) CreateUser(nickname string, email *string, externalId 
 	query = query.Values(toInterface(values)...)
 	queryStr, args, _ := query.ToSql()
 	conn.DB.Query(queryStr, args...)
-	user := models.User{ID_: id, Nickname_: nickname, Email_: email, ExternalID_: externalId}
+	user := models.User{ID_: id, Nickname_: nickname, Email_: email, ExternalID_: externalId, ImageURL_: imageURL}
 	return &user, nil
 }

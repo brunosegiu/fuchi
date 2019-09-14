@@ -3,12 +3,14 @@ import React from 'react'
 import Container from '@material-ui/core/Container'
 import { styled } from '@material-ui/styles'
 import { BrowserRouter } from 'react-router-dom'
+import { ApolloProvider } from '@apollo/react-hooks'
 
 import Toolbar from './components/Toolbar'
 import Content from './components/Content'
 import LoginModal from './components/Login/LoginModal'
 
 import { getToken } from './utils/signIn'
+import { client } from './queries/client'
 
 const ExpandedContainer = styled(Container)({
   maxWidth: '100vw',
@@ -21,15 +23,17 @@ const ExpandedContainer = styled(Container)({
 })
 
 export default () => {
-  const [openDrawer, setDrawerOpen] = React.useState(true)
+  const [openDrawer, setDrawerOpen] = React.useState(false)
 
   return (
     <BrowserRouter>
-      <ExpandedContainer>
-        <Toolbar open={openDrawer} setOpen={setDrawerOpen} />
-        <Content open={openDrawer} setOpen={setDrawerOpen}></Content>
-        <LoginModal open={!getToken() && false}></LoginModal>
-      </ExpandedContainer>
+      <ApolloProvider client={client}>
+        <ExpandedContainer>
+          <Toolbar open={openDrawer} setOpen={setDrawerOpen} />
+          <Content open={openDrawer} setOpen={setDrawerOpen}></Content>
+          <LoginModal open={!getToken()}></LoginModal>
+        </ExpandedContainer>
+      </ApolloProvider>
     </BrowserRouter>
   )
 }
