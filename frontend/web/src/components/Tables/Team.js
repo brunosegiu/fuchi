@@ -8,6 +8,7 @@ import TableRow from '@material-ui/core/TableRow'
 import Container from '@material-ui/core/Container'
 import Paper from '@material-ui/core/Paper'
 import TableHead from '@material-ui/core/TableHead'
+import { Chip, Avatar } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,14 +23,29 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const rows = [
-  { t1: 'Tryole1', t2: 'Tryole2' },
-  { t1: 'Tryole1', t2: 'Tryole2' },
-  { t1: 'Tryole1', t2: 'Tryole2' },
-]
+const sort = (team1, team2) => {
+  const cond = team1.players.length > team2.players.length
+  const longest = cond ? team1 : team2
+  const shortest = !cond ? team1 : team2
+  return { longest, shortest }
+}
 
-export default () => {
+const UserChip = ({ player: { user, skill } }) => {
+  return (
+    <Chip
+      avatar={
+        <Avatar alt={user.nickname} src={user.imageURL}>
+          {user.nickname}
+        </Avatar>
+      }
+      label={`${user.nickname} (${skill})`}
+    />
+  )
+}
+
+export default ({ team1 = { players: [] }, team2 = { players: [] } }) => {
   const classes = useStyles()
+  const { longest, shortest } = sort(team1, team2)
 
   return (
     <Container className={classes.root}>
@@ -42,14 +58,19 @@ export default () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => (
-              <TableRow key={row.t1}>
-                <TableCell component="th" scope="row">
-                  {row.t1}
-                </TableCell>
-                <TableCell align="right">{row.t2}</TableCell>
-              </TableRow>
-            ))}
+            {longest.players.map((player, index) => {
+              const player2 = shortest.players[index]
+              return (
+                <TableRow key={player.userId}>
+                  <TableCell component="th" scope="row">
+                    <UserChip player={player || {}}></UserChip>
+                  </TableCell>
+                  <TableCell align="right">
+                    <UserChip player={player2 || {}}></UserChip>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </Paper>

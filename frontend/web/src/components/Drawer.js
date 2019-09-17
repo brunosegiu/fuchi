@@ -49,13 +49,18 @@ export default ({ open, setOpen }) => {
       </List>
       <Divider />
       <List>
-        {['Matches', 'Leaderboard'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
+        {[
+          { to: '/matches', name: 'Matches' },
+          { to: '/leaderboard', name: 'Leaderboard' },
+        ].map(({ to, name }, index) => (
+          <Link to={to} style={{ textDecoration: 'none', color: 'black' }}>
+            <ListItem button key={name}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={name} />
+            </ListItem>
+          </Link>
         ))}
       </List>
     </Drawer>

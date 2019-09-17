@@ -8,6 +8,7 @@ import SpeedDial from './SpeedDial'
 import Drawer from './Drawer'
 import Dashboard from './Pages/Dashbord'
 import { Container } from '@material-ui/core'
+import Matches from './Pages/Matches'
 
 const Placeholder = () => (
   <div
@@ -39,6 +40,7 @@ export default ({ open, setOpen }) => {
       <Container className={classes.margins}>
         <Route exact path="/" component={Placeholder} />
         <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/matches" component={Matches} />
         <SpeedDial></SpeedDial>
       </Container>
     </React.Fragment>

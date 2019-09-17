@@ -17,7 +17,7 @@ const ExpandedContainer = styled(Container)({
   width: '100vw',
   height: '100vh',
   maxHeight: '100vh',
-  overflowY: 'scroll',
+  overflow: 'hidden',
   padding: 0,
   margin: 0,
 })
