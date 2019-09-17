@@ -1,6 +1,7 @@
 package resolvers
 
 import (
+	database "api/database"
 	models "api/models"
 	"context"
 	"sort"
@@ -28,7 +29,8 @@ func (r *Resolver) GetTeams(ctx context.Context, args GetTeamArgs) ([]models.Tea
 	inputs := args.Players
 	players := make([]models.Player, len(inputs))
 	for i, input := range inputs {
-		players[i] = models.Player{UserID: input.UserID, Skill: input.Skill}
+		user, _ := database.LoadUser(input.UserID)
+		players[i] = models.Player{User: *user, Skill: input.Skill}
 	}
 	return patition(players, 2), nil
 }

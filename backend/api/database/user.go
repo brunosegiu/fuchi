@@ -9,12 +9,9 @@ import (
 
 func LoadUser(id graphql.ID) (*models.User, error) {
 	user := &models.User{}
-	DB.Where("id = ?", string(id)).First(&user)
-	err := DB.First(&user).Error
-	if err != nil {
-		user = nil
-	}
-	return user, err
+	DB.First(&user, "id = ?", id)
+	println(id)
+	return user, nil
 }
 
 func CreateUser(nickname string, email *string, externalId *string, imageURL *string) (*models.User, error) {

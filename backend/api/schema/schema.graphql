@@ -12,23 +12,23 @@ type User {
 }
 
 input PlayerInput {
-	userId: ID!
-	skill: Int!
+  userId: ID!
+  skill: Int!
 }
 
 type Player {
-	userId: ID!
-	skill: Int!
+  user: User!
+  skill: Int!
 }
 
 type Team {
-	players: [Player!]!
-	skill: Int!
+  players: [Player!]!
+  skill: Int!
 }
 
 type Query {
   me: User
-  getTeams(players: [PlayerInput!]!): [Team!]! 
+  getTeams(players: [PlayerInput!]!): [Team!]!
 }
 
 type Mutation {
