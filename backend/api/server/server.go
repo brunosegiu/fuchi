@@ -32,7 +32,9 @@ func main() {
 		w.Write(webpage)
 	}))
 	mux.Handle("/query", commons.WithAuth(&relay.Handler{Schema: schema}))
-
-	handler := cors.Default().Handler(mux)
+	c := cors.New(cors.Options{
+		AllowedHeaders: []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"},
+	})
+	handler := c.Handler(mux)
 	log.Fatal(http.ListenAndServe(":1313", logger.Handler(handler, os.Stdout, logger.DevLoggerType)))
 }
