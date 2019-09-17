@@ -33,7 +33,6 @@ const SectionContainer = styled(Container)({
 
 export default ({ open, setOpen }) => {
   const user = React.useContext(UserContext)
-  console.log(user)
   return (
     <CustomAppBar position="fixed">
       <CustomToolbar disableGutters>

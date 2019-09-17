@@ -1,5 +1,17 @@
 import gql from 'graphql-tag'
 
+export const ME = gql`
+  {
+    me {
+      id
+      nickname
+      email
+      externalId
+      imageURL
+    }
+  }
+`
+
 export const CREATE_USER = gql`
   mutation CreateUser(
     $nickname: String!
