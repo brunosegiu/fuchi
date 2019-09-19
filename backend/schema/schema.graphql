@@ -33,5 +33,5 @@ type Query {
 
 type Mutation {
   createUser(nickname: String!): User
-  createAuthUser(idToken: String!): User
+  createAuthUser(idToken: String!): String
 }

@@ -25,6 +25,10 @@ func connect() *gorm.DB {
 	if err != nil {
 		panic(err)
 	}
+	gorm.DefaultTableNameHandler = func(rbacDb *gorm.DB, defaultTableName string) string {
+		return "fuchi_" + defaultTableName
+	}
+	db.LogMode(true)
 	db.AutoMigrate(&models.User{})
 
 	return db

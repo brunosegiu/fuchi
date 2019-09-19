@@ -2,6 +2,7 @@ package resolvers
 
 import (
 	"context"
+	"fmt"
 
 	database "api/database"
 	models "api/models"
@@ -27,22 +28,26 @@ const CLIENT_ID string = "503139838940-69vbq5581jf5mqak4ivmfg5v4rui9d7s.apps.goo
 func toAuthUser(idToken string) (*models.User, error) {
 	verifier := googleVerifier.Verifier{}
 	err := verifier.VerifyIDToken(idToken, []string{CLIENT_ID})
-	if err == nil {
-		claimSet, err := googleVerifier.Decode(idToken)
-		if err != nil {
-			return nil, err
-		}
-		user := models.NewUser(claimSet.Name, &claimSet.Email, &claimSet.Sub, &claimSet.Picture)
-		return &user, nil
+	if err != nil {
+		return nil, err
 	}
-	return nil, err
+	claimSet, err := googleVerifier.Decode(idToken)
+	if err != nil {
+		return nil, err
+	}
+	user := models.NewUser(claimSet.Name, &claimSet.Email, &claimSet.Sub, &claimSet.Picture)
+	return &user, nil
 }
 
-func (r *Resolver) CreateAuthUser(ctx context.Context, args struct{ IdToken string }) (*models.User, error) {
+func (r *Resolver) CreateAuthUser(ctx context.Context, args struct{ IdToken string }) (*string, error) {
 	user, err := toAuthUser(args.IdToken)
 	if err != nil {
-		err := database.CreateUser(user)
-		return user, err
+		return nil, err
 	}
-	return nil, err
+	err = database.CreateUser(user)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Print(*user.Token)
+	return user.Token, err
 }

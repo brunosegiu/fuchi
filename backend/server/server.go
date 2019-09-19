@@ -10,6 +10,7 @@ import (
 	"github.com/go-http-utils/logger"
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
+	"github.com/rs/cors"
 
 	database "api/database"
 	resolvers "api/resolvers"
@@ -40,6 +41,9 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/query", Authorize(&relay.Handler{Schema: schema}))
-
-	log.Fatal(http.ListenAndServe(":1313", logger.Handler(mux, os.Stdout, logger.DevLoggerType)))
+	c := cors.New(cors.Options{
+		AllowedHeaders: []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"},
+	})
+	handler := c.Handler(mux)
+	log.Fatal(http.ListenAndServe(":1313", logger.Handler(handler, os.Stdout, logger.DevLoggerType)))
 }
