@@ -2,7 +2,7 @@ import React from 'react'
 
 import Container from '@material-ui/core/Container'
 import { styled } from '@material-ui/styles'
-import { useQuery } from '@apollo/react-hooks'
+import { useLazyQuery } from '@apollo/react-hooks'
 
 import Toolbar from './components/Toolbar'
 import Content from './components/Content'
@@ -24,7 +24,12 @@ const ExpandedContainer = styled(Container)({
 
 export default () => {
   const [openDrawer, setDrawerOpen] = React.useState(false)
-  const { loading, error, data } = useQuery(ME)
+  const [loadMe, { called, loading, error, data }] = useLazyQuery(ME)
+
+  if (getToken() && !called) {
+    loadMe()
+  }
+
   return (
     <UserContext.Provider value={data && data.me}>
       <ExpandedContainer>

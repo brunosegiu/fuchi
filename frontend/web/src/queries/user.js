@@ -35,3 +35,9 @@ export const CREATE_USER = gql`
     }
   }
 `
+
+export const CREATE_AUTH_USER = gql`
+  mutation CreateAuthUser($idToken: String!) {
+    createAuthUser(idToken: $idToken)
+  }
+`
