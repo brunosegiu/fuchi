@@ -23,12 +23,14 @@ const Placeholder = () => (
 const useStyles = makeStyles(theme => ({
   margins: {
     ...theme.mixins.toolbar,
-    margin: `15vh 0 0 0`,
+    margin: `64px 0 0 0`,
     minWidth: '100%',
     height: '100%',
     display: 'flex',
     justifyContent: 'center',
     overflow: 'hidden',
+    backgroundColor: '#f5f5f5',
+    padding: '5vh 5vw',
   },
 }))
 

@@ -10,9 +10,9 @@ import { useQuery, useLazyQuery } from '@apollo/react-hooks'
 import Team from '../Tables/Team'
 import PlayersList from '../Tables/PlayersList'
 
-import { GET_TEAMS } from '../../queries/matches'
 import styled from '@emotion/styled'
 import { flexbox } from '@material-ui/system'
+import { Paper } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
+    padding: theme.spacing(3, 2),
   },
   button: {
     marginRight: theme.spacing(1),
@@ -88,7 +89,7 @@ export default () => {
   }
 
   return (
-    <div className={classes.root}>
+    <Paper className={classes.root}>
       <Typography variant="h2">New match</Typography>
       <div style={{ minWidth: '50%' }}>
         <Stepper activeStep={activeStep}>
@@ -115,6 +116,6 @@ export default () => {
           {steps.length - 1 === activeStep ? 'Confirm' : 'Next'}
         </Button>
       </ControlContainer>
-    </div>
+    </Paper>
   )
 }
