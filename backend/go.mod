@@ -15,6 +15,7 @@ require (
 	github.com/lib/pq v1.2.0
 	github.com/mdempsky/gocode v0.0.0-20190203001940-7fb65232883f // indirect
 	github.com/rs/cors v1.6.0
+	golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45 // indirect
 	golang.org/x/tools v0.0.0-20190914235951-31e00f45c22e // indirect
 	gopkg.in/alecthomas/kingpin.v3-unstable v3.0.0-20180810215634-df19058c872c // indirect
