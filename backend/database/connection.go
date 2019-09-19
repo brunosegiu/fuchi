@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	models "api/models"
-
 	gorm "github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -29,7 +27,7 @@ func connect() *gorm.DB {
 		return "fuchi_" + defaultTableName
 	}
 	db.LogMode(true)
-	db.AutoMigrate(&models.User{})
+	Migrate(db)
 
 	return db
 }

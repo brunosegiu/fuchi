@@ -12,26 +12,23 @@ export const ME = gql`
   }
 `
 
-export const CREATE_USER = gql`
-  mutation CreateUser(
-    $nickname: String!
-    $idToken: String
-    $email: String
-    $externalId: String
-    $imageURL: String
-  ) {
-    createUser(
-      nickname: $nickname
-      idToken: $idToken
-      email: $email
-      externalId: $externalId
-      imageURL: $imageURL
-    ) {
+export const FIND = gql`
+  query FindUsers($nickname: String!) {
+    findUsers(nickname: $nickname) {
       id
       nickname
       email
       externalId
       imageURL
+    }
+  }
+`
+
+export const CREATE_USER = gql`
+  mutation CreateUser($nickname: String!) {
+    createUser(nickname: $nickname) {
+      id
+      nickname
     }
   }
 `

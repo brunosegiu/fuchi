@@ -28,6 +28,7 @@ type Team {
 
 type Query {
   me: User
+  findUsers(nickname: String!): [User!]!
   getTeams(players: [PlayerInput!]!): [Team!]!
 }
 

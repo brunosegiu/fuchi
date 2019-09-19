@@ -1,11 +1,11 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, emphasize } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useLazyQuery } from '@apollo/react-hooks'
 
 import Team from '../Tables/Team'
 import PlayersList from '../Tables/PlayersList'
@@ -59,34 +59,31 @@ const renderStep = step => {
   }
 }
 
-const players = [
-  { userId: '1c70011b-2c0f-4461-a192-c7e6310f24f3', skill: 5 },
-  { userId: '1c70011b-2c0f-4461-a192-c7e6310f24f3', skill: 7 },
-  { userId: '1c70011b-2c0f-4461-a192-c7e6310f24f3', skill: 3 },
-  { userId: '1c70011b-2c0f-4461-a192-c7e6310f24f3', skill: 7 },
-  { userId: '1c70011b-2c0f-4461-a192-c7e6310f24f3', skill: 9 },
-  { userId: '1c70011b-2c0f-4461-a192-c7e6310f24f3', skill: 4 },
-  { userId: '1c70011b-2c0f-4461-a192-c7e6310f24f3', skill: 8 },
-  { userId: '1c70011b-2c0f-4461-a192-c7e6310f24f3', skill: 1 },
-]
-
 export default () => {
   const classes = useStyles()
   const [activeStep, setActiveStep] = React.useState(0)
-  const { loading, error, data } = useQuery(GET_TEAMS, {
-    variables: { players },
-  })
-  const [team1, team2] = data ? data.getTeams : [undefined, undefined]
+  const [selectedUsers, setSelectedUsers] = React.useState({})
 
-  function handleNext() {
+  const handleNext = () => {
+    if (activeStep === 0) {
+      //   const [getTeams] = useLazyQuery(GET_TEAMS, {
+      //     variables: {
+      //       players: Object.values(selectedUsers).map(en => ({
+      //         userId: en.id,
+      //         skill: Math.round(Math.random() * 100),
+      //       })),
+      //     },
+      //   })
+    }
+
     setActiveStep(Math.min(activeStep + 1, steps.length - 1))
   }
 
-  function handleBack() {
+  const handleBack = () => {
     setActiveStep(Math.max(activeStep - 1, 0))
   }
 
-  function handleReset() {
+  const handleReset = () => {
     setActiveStep(0)
   }
 
@@ -103,9 +100,14 @@ export default () => {
         </Stepper>
       </div>
       <StepContainer>
-        {activeStep === 0 && <PlayersList></PlayersList>}
-        {activeStep === 1 && <Team team1={team1} team2={team2}></Team>}
-        {activeStep === 2 && <Team team1={team1} team2={team2}></Team>}
+        {activeStep === 0 && (
+          <PlayersList
+            checked={selectedUsers}
+            setChecked={setSelectedUsers}
+          ></PlayersList>
+        )}
+        {activeStep === 1 && <Team team1={[]} team2={[]}></Team>}
+        {activeStep === 2 && <Team team1={[]} team2={[]}></Team>}
       </StepContainer>
       <ControlContainer>
         <Button onClick={handleBack}>Back</Button>

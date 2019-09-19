@@ -45,5 +45,6 @@ func main() {
 		AllowedHeaders: []string{"Accept", "Content-Type", "Content-Length", "Accept-Encoding", "X-CSRF-Token", "Authorization"},
 	})
 	handler := c.Handler(mux)
+
 	log.Fatal(http.ListenAndServe(":1313", logger.Handler(handler, os.Stdout, logger.DevLoggerType)))
 }

@@ -12,7 +12,6 @@ export default () => {
   const [createUser, { data }] = useMutation(CREATE_AUTH_USER)
 
   if (data && data.createAuthUser) {
-    console.log(data)
     handleSignIn(data.createAuthUser)
     window.location.reload()
   }

@@ -15,11 +15,18 @@ func (r *Resolver) Me(ctx context.Context) (*models.User, error) {
 	return user, nil
 }
 
+func (r *Resolver) FindUsers(ctx context.Context, args struct {
+	Nickname string
+}) ([]models.User, error) {
+	users, err := database.FindWithNickname(args.Nickname)
+	return users, err
+}
+
 func (r *Resolver) CreateUser(ctx context.Context, args struct {
 	Nickname string
 }) (*models.User, error) {
 	user := models.NewNAuth(args.Nickname)
-	err := database.CreateUser(&user)
+	err := database.CreateUser(user)
 	return &user, err
 }
 
@@ -44,7 +51,7 @@ func (r *Resolver) CreateAuthUser(ctx context.Context, args struct{ IdToken stri
 	if err != nil {
 		return nil, err
 	}
-	err = database.CreateUser(user)
+	err = database.CreateUser(*user)
 	if err != nil {
 		return nil, err
 	}

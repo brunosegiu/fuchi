@@ -7,12 +7,17 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import Checkbox from '@material-ui/core/Checkbox'
 import Avatar from '@material-ui/core/Avatar'
-import { Paper, IconButton } from '@material-ui/core'
+import { Paper, IconButton, Typography } from '@material-ui/core'
 import { styled } from '@material-ui/styles'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import Search from '@material-ui/icons/Search'
 import Add from '@material-ui/icons/Add'
+
+import { useQuery, useMutation } from '@apollo/react-hooks'
+
+import { FIND } from '../../queries/user'
+import { CREATE_USER } from '../../queries/user'
 
 const ListContainer = styled(Paper)({
   maxWidth: '400px',
@@ -23,61 +28,52 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
+    maxHeight: '50vh',
+    overflowY: 'scroll',
   },
   search: {
-    width: '90%',
+    width: '100%',
     padding: 5,
   },
   inputWrapper: {
     width: '80%',
     display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
   },
   input: {
     width: '100%',
   },
+  count: {
+    marginLeft: '10px',
+  },
 }))
 
-const users = [
-  {
-    id: '1700d90a-3f8c-4d14-b470-f5e6119cd320',
-    nickname: 'Bruno Sena',
-    email: 'brunosegiu@gmail.com',
-    externalId: '115927929319222074078',
-    imageURL:
-      'https://lh3.googleusercontent.com/a-/AAuE7mC0ENwQ7XtiRP70uoYFNi5Q4ajMcJwpWbRjwf8U=s96-c',
-  },
-  {
-    id: '1700d90324a-3f8c-4d14-b470-f5e6119cd320',
-    nickname: 'Pepe',
-    email: 'brunosegiu@gmail.com',
-    externalId: '115927929319222074078',
-    imageURL:
-      'https://lh3.googleusercontent.com/a-/AAuE7mC0ENwQ7XtiRP70uoYFN45Q4ajMcJwpWbRjwf8U=s96-c',
-  },
-  {
-    id: '1700d90a-3f8234c-4d14-b470-f5e6119cd320',
-    nickname: 'Tano',
-    email: 'brunosegiu@gmail.com',
-    externalId: '115927929319222074078',
-    imageURL:
-      'https://lh3.googleusercontent.com/a-/AAuE7mC0ENwQ7XtiaP70uoYFNi5Q4ajMcJwpWbRjwf8U=s96-c',
-  },
-]
-
-export default ({ addPlayers }) => {
+export default ({ checked, setChecked }) => {
   const classes = useStyles()
-  const [checked, setChecked] = React.useState(new Set())
+
   const [search, setSearch] = React.useState('')
 
-  const handleToggle = userId => () => {
-    const newChecked = new Set(checked)
-    if (checked.has(userId)) {
-      newChecked.delete(userId)
+  const { loading, error, data: userData } = useQuery(FIND, {
+    variables: { nickname: search },
+  })
+  const users = userData ? userData.findUsers : []
+
+  const handleToggle = user => () => {
+    const newChecked = { ...checked }
+    if (newChecked[user.id]) {
+      delete newChecked[user.id]
     } else {
-      newChecked.add(userId)
+      newChecked[user.id] = user
     }
     setChecked(newChecked)
   }
+
+  const [createUser] = useMutation(CREATE_USER, {
+    onCompleted: ({ createUser: user }) => {
+      handleToggle(user)()
+    },
+  })
 
   return (
     <ListContainer>
@@ -99,12 +95,16 @@ export default ({ addPlayers }) => {
             className={classes.input}
           />
         </Grid>
+        <Grid item className={classes.count}>
+          <Typography>{Object.keys(checked).length}</Typography>
+        </Grid>
       </Grid>
       <List dense className={classes.root}>
-        {users.map(({ id, nickname, imageURL }) => {
+        {users.map(user => {
+          const { id, nickname, imageURL } = user
           const labelId = `checkbox-list-secondary-label-${id}`
           return (
-            <ListItem key={id} button onClick={handleToggle(id)}>
+            <ListItem key={id} button onClick={handleToggle(user)}>
               <ListItemAvatar>
                 <Avatar src={imageURL} alt={nickname[0]} />
               </ListItemAvatar>
@@ -116,8 +116,8 @@ export default ({ addPlayers }) => {
               <ListItemSecondaryAction>
                 <Checkbox
                   edge="end"
-                  onChange={handleToggle(id)}
-                  checked={checked.has(id)}
+                  onChange={handleToggle(user)}
+                  checked={!!checked[user.id]}
                   inputProps={{ 'aria-labelledby': labelId }}
                 />
               </ListItemSecondaryAction>
@@ -138,8 +138,7 @@ export default ({ addPlayers }) => {
               <IconButton
                 edge="end"
                 onClick={() => {
-                  //Add user
-                  setSearch('')
+                  createUser({ variables: { nickname: search } })
                 }}
               >
                 <Add></Add>

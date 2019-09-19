@@ -18,15 +18,15 @@ type User struct {
 
 func NewUser(Nickname string, Email *string, ExternalID *string, ImageURL *string) User {
 	var id string = guuid.New().String()
-	var token string
+	var token *string = nil
 	if ExternalID != nil {
 		var err error
-		token, err = commons.GetToken(*ExternalID)
+		token, err = commons.GetToken(ExternalID)
 		if err != nil {
 			panic(err)
 		}
 	}
-	return User{ID: graphql.ID(id), Nickname: Nickname, Email: Email, ExternalID: ExternalID, ImageURL: ImageURL, Token: &token}
+	return User{ID: graphql.ID(id), Nickname: Nickname, Email: Email, ExternalID: ExternalID, ImageURL: ImageURL, Token: token}
 }
 
 func NewNAuth(Nickname string) User {

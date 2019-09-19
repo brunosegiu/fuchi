@@ -18,7 +18,18 @@ func LoadUserWithToken(token string) (*models.User, error) {
 	return user, nil
 }
 
-func CreateUser(user *models.User) error {
-	DB.Set("gorm:insert_option", "ON CONFLICT DO NOTHING").Create(&user)
+func FindWithNickname(nickname string) ([]models.User, error) {
+	var users []models.User
+	const limit int = 50
+	if nickname == "" {
+		DB.Limit(limit).Find(&users)
+	} else {
+		DB.Where("levenshtein(nickname, ?) < 7", nickname).Limit(limit).Find(&users)
+	}
+	return users, nil
+}
+
+func CreateUser(user models.User) error {
+	DB.FirstOrCreate(&user, user)
 	return nil
 }
